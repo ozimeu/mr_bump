@@ -25,5 +25,9 @@ module MrBump
     def self.merge_pr(repo_url, pr_id)
       client.merge_pull_request(repo_url, pr_id)
     end
+
+    def self.is_merged?(repo_url, pr_id)
+      client.pull_merged?(repo_url, pr_id)
+    end
   end
 end

@@ -9,6 +9,7 @@ require 'mr_bump/git_api'
 
 release = !MrBump.current_branch[/^release/].nil?
 master = !MrBump.current_branch[/^master$/].nil?
+repo_path = MrBump.git_config.path
 
 unless release || master
   puts 'Need to be on either release or master branch'
@@ -21,26 +22,23 @@ unless master || MrBump.current_branch.to_s == "release/#{MrBump.current_uat_maj
   exit 1
 end
 
-puts 'Have you already closed your PR?'
-loop do
-  print '[Y]es / [N]o : '
-  choice = gets.chomp.upcase
-
-  case choice
-  when 'Y'
-    break
-  when 'N'
-    puts 'Here are the 10 most recent PRs in your repo:'
-    puts MrBump::GitApi.sorted_prs(MrBump.git_config.path)
-    loop do
-      print 'Enter the PR number to merge : '
-      pr_id = gets.chomp
-      MrBump::GitApi.merge_pr(MrBump.git_config.path, pr_id)
-      break
-    end
-  else
-    puts "I'm sorry Dave; I'm afraid I can't do that."
+puts 'Here are the 10 most recent open PRs in your repo:'
+puts MrBump::GitApi.sorted_prs(repo_path)
+pr_id = ""
+while pr_id !~ /\d+/
+  print 'Enter your PR ID number : '
+  pr_id = gets.chomp
+  if pr_id !~ /\d+/
+    puts 'PR ID must only contain numbers'
   end
+end
+merged = MrBump::GitApi.is_merged?(repo_path, pr_id)
+
+if merged
+  puts 'PR is already closed. . .'
+else
+  puts "PR is not merged, attempting to merge PR #{pr_id}. . ."
+  MrBump::GitApi.merge_pr(repo_path, pr_id)
 end
 
 unless system('git remote update > /dev/null 2>&1')
@@ -50,7 +48,20 @@ end
 
 unless `git rev-parse @` == `git rev-parse @{u}`
   puts 'Not up to date with origin! Please run git pull'
-  exit 1
+  puts "Would you like to run 'git pull' now?"
+  loop do
+    print "[Y]es / [N]o : "
+    choice = gets.chomp.upcase
+
+    case choice
+    when 'Y'
+      system("git pull --ff-only")
+    when 'N'
+      exit 1
+    else
+      puts "I'm sorry Dave; I'm afraid I can't do that."
+    end
+  end
 end
 
 unless File.file?('CHANGELOG.md')
