@@ -5,6 +5,7 @@
 
 # Script to tag releases and update changelogs
 require 'optparse'
+require 'tempfile'
 
 require 'mr_bump'
 require 'mr_bump/git_api'
