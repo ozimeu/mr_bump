@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name               = 'mr_bump'
-  s.version            = '0.3.7'
+  s.version            = '0.3.8'
   s.licenses           = ['MPL-2.0']
   s.default_executable = 'mr_bump'
   s.executables        = ['mr_bump']
@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
     s.required_rubygems_version = Gem::Requirement.new('>= 0')
   end
 
-  s.authors = ['Richard Fitzgerald', 'Josh Bryant']
+  s.authors = ['Richard Fitzgerald', 'Josh Bryant', 'Lukasz Ozimek']
   s.date = '2016-08-18'
   s.description = 'Bump versions'
   s.email = 'richard.fitzgerald36@gmail.com'
