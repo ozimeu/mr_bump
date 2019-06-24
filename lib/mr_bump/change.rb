@@ -10,7 +10,7 @@ module MrBump
   class Change
     attr_reader :pr_number, :branch_type, :dev_id, :config, :comment_lines, :branch_name
 
-    BRANCH_TYPES = %w(Bugfix Feature Hotfix Task).freeze
+    BRANCH_TYPES = %w(Bugfix Feature Hotfix Task Refinement).freeze
 
     FORMATS = {
       dev_id: '\w+[-_]?\d+',
