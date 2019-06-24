@@ -23,7 +23,7 @@ module MrBump
   def self.release_branch_for_version(ver)
     prefix = config_file['release_prefix']
     suffix = config_file['release_suffix']
-    "#{prefix}#{ver.major}.#{ver.minor}.0#{suffix}"
+    "#{prefix}#{ver.major}.#{ver.minor}#{suffix}"
   end
 
   def self.on_release_branch?
