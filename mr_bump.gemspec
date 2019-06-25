@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name               = 'mr_bump'
-  s.version            = '0.3.8'
+  s.version            = '0.3.9'
   s.licenses           = ['MPL-2.0']
   s.default_executable = 'mr_bump'
   s.executables        = ['mr_bump']
@@ -12,14 +12,14 @@ Gem::Specification.new do |s|
   s.authors = ['Richard Fitzgerald', 'Josh Bryant', 'Lukasz Ozimek']
   s.date = '2016-08-18'
   s.description = 'Bump versions'
-  s.email = 'richard.fitzgerald36@gmail.com'
+  s.email = ['richard.fitzgerald36@gmail.com', 'ozim10@gmail.com']
   s.files = [
     'lib/mr_bump.rb', 'lib/mr_bump/version.rb', 'lib/mr_bump/slack.rb', 'lib/mr_bump/config.rb',
     'bin/mr_bump', 'lib/mr_bump/git_config.rb', 'lib/mr_bump/git_api.rb', 'lib/mr_bump/change.rb',
     'lib/mr_bump/regex_template.rb', 'defaults.yml'
   ]
   s.test_files = Dir['spec/**/*']
-  s.homepage = 'https://github.com/xulaus/mr_bump'
+  s.homepage = 'https://github.com/ozimeu/mr_bump'
   s.require_paths = ['lib']
   s.rubygems_version = '1.6.2'
   s.summary = 'BUMP!'
