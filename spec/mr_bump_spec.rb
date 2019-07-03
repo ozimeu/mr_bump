@@ -211,8 +211,8 @@ describe MrBump do
         ]
       end
 
-      it 'returns 0.0.0 as the version' do
-        expect(result).to eq(MrBump::Version.new('0.0.0'))
+      it 'returns 0.0 as the version' do
+        expect(result).to eq(MrBump::Version.new('0.0'))
       end
     end
 
@@ -398,8 +398,8 @@ describe MrBump do
         end
       end
 
-      context 'when on a branch called release/0.0.0' do
-        let(:current_branch) { 'release/0.0.0' }
+      context 'when on a branch called release/0.0' do
+        let(:current_branch) { 'release/0.0' }
 
         it 'returns true' do
           expect(MrBump.on_release_branch?).to eq(true)
@@ -432,7 +432,7 @@ describe MrBump do
       end
 
       context 'branch with correct prefix and suffix' do
-        let(:current_branch) { '?v0.0.0+' }
+        let(:current_branch) { '?v0.0+' }
 
         it 'returns true' do
           expect(MrBump.on_release_branch?).to eq(true)
@@ -448,7 +448,7 @@ describe MrBump do
       end
 
       context 'on a branch which is valid  with default config' do
-        let(:current_branch) { 'release/0.0.0' }
+        let(:current_branch) { 'release/0.0' }
 
         it 'returns false' do
           expect(MrBump.on_release_branch?).to eq(false)
@@ -459,7 +459,7 @@ describe MrBump do
 
   describe '#uat_branch?' do
     before(:each) do
-      allow(MrBump).to receive(:current_uat_major).and_return(MrBump::Version.new('0.0.0'))
+      allow(MrBump).to receive(:current_uat_major).and_return(MrBump::Version.new('0.0'))
     end
     before(:each) { allow(MrBump).to receive(:config_file).and_return(config) }
 
@@ -472,7 +472,7 @@ describe MrBump do
       end
 
       it 'correctly constucts uat branch name' do
-        expect(MrBump.uat_branch).to eq('release/0.0.0')
+        expect(MrBump.uat_branch).to eq('release/0.0')
       end
     end
 
@@ -485,7 +485,7 @@ describe MrBump do
       end
 
       it 'correctly constucts uat branch name' do
-        expect(MrBump.uat_branch).to eq('?v0.0.0+')
+        expect(MrBump.uat_branch).to eq('?v0.0+')
       end
     end
   end
@@ -530,6 +530,56 @@ describe MrBump do
       let(:changes) { MrBump.change_log_items_for_range('', '') }
       it 'converts raw git log ouput to changlog objects' do
         expect(changes).to all(be_a(MrBump::Change))
+      end
+    end
+  end
+
+  describe '#release_name' do
+    before(:each) do
+      allow(MrBump).to receive(:merge_logs).and_return(log)
+    end
+    let(:release_name) { MrBump.release_name }
+
+    context 'when valid release name branch merged' do
+      let(:log) do
+        [
+          'Merge pull request #41 from mr_bump/atomic_anteater',
+          'Merge pull request #4 from mr_bump/hotfix/DEV-1261',
+          'Comment',
+          'Merge pull request #1376 from mr_bump/release/10.19.0',
+          'Comment',
+          'Over several',
+          'Lines',
+          'Merge pull request #233 from mr_bump/bugfix/master',
+          'asdasd',
+          'Merge pull request #1336 from mr_bump/MDV-1261',
+          'wqefqfqefqwefqef'
+        ]
+      end
+
+      it 'converts raw git log ouput to proper release name' do
+        expect(release_name).to eq('Atomic Anteater')
+      end
+    end
+
+    context 'when NO valid release name branch merged' do
+      let(:log) do
+        [
+          'Merge pull request #4 from mr_bump/hotfix/PBW-1261',
+          'Comment',
+          'Merge pull request #1376 from mr_bump/release/10.19.0',
+          'Comment',
+          'Over several',
+          'Lines',
+          'Merge pull request #233 from mr_bump/bugfix/master',
+          'asdasd',
+          'Merge pull request #1336 from mr_bump/MDV-1261',
+          'wqefqfqefqwefqef'
+        ]
+      end
+
+      it 'returns nil as release name' do
+        expect(release_name).to eq(nil)
       end
     end
   end

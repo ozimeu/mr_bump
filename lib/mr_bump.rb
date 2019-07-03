@@ -23,7 +23,7 @@ module MrBump
   def self.release_branch_for_version(ver)
     prefix = config_file['release_prefix']
     suffix = config_file['release_suffix']
-    "#{prefix}#{ver.major}.#{ver.minor}.0#{suffix}"
+    "#{prefix}#{ver.major}.#{ver.minor}#{suffix}"
   end
 
   def self.on_release_branch?
@@ -127,6 +127,17 @@ module MrBump
         puts e
       end
     end.flatten.compact
+  end
+
+  def self.release_name
+    revision = MrBump.last_release
+    head = MrBump.current_branch
+    changes = change_log_items_for_range(revision, head).reject(&:has_no_detail?)
+    release_branch_name = changes.first.branch_name
+    ticket_prefix = config_file['ticket_prefix'].downcase
+    release_regex = /(#{ticket_prefix}|task|refinement|hotfix|bugfix)/
+    release_subbranch = release_branch_name.downcase[release_regex].nil?
+    release_branch_name.split("_").map(&:capitalize).join(' ') if release_subbranch
   end
 
   def self.file_prepend(file, str)

@@ -174,9 +174,10 @@ end
 
 changes = MrBump.change_log_items_for_range(last_release, MrBump.current_branch)
             .reject(&:has_no_detail?)
-            .map(&:to_md)
-changes = changes.join("\n")
-md_changes = "# #{new_release}\n#{changes}\n\n"
+release_name = MrBump.release_name
+changes.shift if release_name
+changes = changes.map(&:to_md).join("\n")
+md_changes = "# #{new_release} #{release_name}\n#{changes}\n\n"
 
 puts "You are bumping from version '#{last_release}' to '#{new_release}'"
 puts ''

@@ -19,7 +19,7 @@
 # Changelog template
 # Your changelog can be customized by using a template. The template is in
 # mustache format. The allowed parameters are
-#   - branch_type: Bugfix / Feature / Hotfix
+#   - branch_type: Bugfix / Feature / Hotfix / Refinement
 #   - dev_id: The development ID for this feature
 #   - comment_lines: Array of all lines in commit comment
 #   - first_commit_line: The first line of the commit comment
@@ -30,3 +30,5 @@ markdown_template: " * {{branch_type}}{{#dev_id}} - {{.}}{{/dev_id}}{{#first_com
 release_prefix: release/
 # Suffix for release branches, this allows arbitrary text to be added after the version number on a release branch
 release_suffix: ""
+# Prefix for ticket numbering, this is used to avoid incorrect named releases appear next to the version number
+ticket_prefix: "PBW-"

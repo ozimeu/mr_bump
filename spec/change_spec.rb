@@ -149,6 +149,50 @@ describe MrBump::Change do
       it { should_not have_no_detail }
     end
 
+    context 'when given a merge string in the default PR format for a refinement' do
+      let(:merge_str) { 'Merge pull request #555 from AGithubUsername/refinement/DEV-1_Stuff' }
+
+      it 'extracts the correct PR Number' do
+        expect(change.pr_number).to eq('555')
+      end
+
+      it 'extracts the correct branch type' do
+        expect(change.branch_type).to eq('Refinement')
+      end
+
+      it 'extracts the correct dev ID' do
+        expect(change.dev_id).to eq('DEV-1')
+      end
+
+      it 'renders to markdown correctly' do
+        expect(change.to_md).to eq(" * Refinement - DEV-1 - Line 1\n  Line 2")
+      end
+
+      it { should_not have_no_detail }
+    end
+
+    context 'when given a merge string in the default PR format for a refinement with no DevID' do
+      let(:merge_str) { 'Merge pull request #555 from AGithubUsername/refinement/Stuff' }
+
+      it 'extracts the correct PR Number' do
+        expect(change.pr_number).to eq('555')
+      end
+
+      it 'extracts the correct branch type' do
+        expect(change.branch_type).to eq('Refinement')
+      end
+
+      it 'fails to extract dev ID' do
+        expect(change.dev_id).to be_nil
+      end
+
+      it 'renders to markdown correctly' do
+        expect(change.to_md).to eq(" * Refinement - Line 1\n  Line 2")
+      end
+
+      it { should_not have_no_detail }
+    end
+
     context 'when given a merge string in the default manual format for a feature' do
       let(:merge_str) { "Merge branch 'feature/DEV-1_Stuff'" }
 
