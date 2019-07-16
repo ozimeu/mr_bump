@@ -174,8 +174,12 @@ end
 
 changes = MrBump.change_log_items_for_range(last_release, MrBump.current_branch)
             .reject(&:has_no_detail?)
-release_name = MrBump.release_name
-changes.shift if release_name
+
+if develop
+  print "Please type the name of the release here2: "
+  release_name = STDIN.gets.chomp
+end
+
 changes = changes.map(&:to_md).join("\n")
 md_changes = "# #{new_release} #{release_name}\n#{changes}\n\n"
 
