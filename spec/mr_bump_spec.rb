@@ -534,56 +534,6 @@ describe MrBump do
     end
   end
 
-  describe '#release_name' do
-    before(:each) do
-      allow(MrBump).to receive(:merge_logs).and_return(log)
-    end
-    let(:release_name) { MrBump.release_name }
-
-    context 'when valid release name branch merged' do
-      let(:log) do
-        [
-          'Merge pull request #41 from mr_bump/atomic_anteater',
-          'Merge pull request #4 from mr_bump/hotfix/DEV-1261',
-          'Comment',
-          'Merge pull request #1376 from mr_bump/release/10.19.0',
-          'Comment',
-          'Over several',
-          'Lines',
-          'Merge pull request #233 from mr_bump/bugfix/master',
-          'asdasd',
-          'Merge pull request #1336 from mr_bump/MDV-1261',
-          'wqefqfqefqwefqef'
-        ]
-      end
-
-      it 'converts raw git log ouput to proper release name' do
-        expect(release_name).to eq('Atomic Anteater')
-      end
-    end
-
-    context 'when NO valid release name branch merged' do
-      let(:log) do
-        [
-          'Merge pull request #4 from mr_bump/hotfix/PBW-1261',
-          'Comment',
-          'Merge pull request #1376 from mr_bump/release/10.19.0',
-          'Comment',
-          'Over several',
-          'Lines',
-          'Merge pull request #233 from mr_bump/bugfix/master',
-          'asdasd',
-          'Merge pull request #1336 from mr_bump/MDV-1261',
-          'wqefqfqefqwefqef'
-        ]
-      end
-
-      it 'returns nil as release name' do
-        expect(release_name).to eq(nil)
-      end
-    end
-  end
-
   describe '#last_release' do
     before do
       allow(MrBump).to receive(:current_uat).and_return(MrBump::Version.new('0.1.3'))
