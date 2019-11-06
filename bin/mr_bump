@@ -176,7 +176,7 @@ changes = MrBump.change_log_items_for_range(last_release, MrBump.current_branch)
             .reject(&:has_no_detail?)
 
 if develop
-  print "Please type the name of the release here2: "
+  print "Please type the name of the release here: "
   release_name = STDIN.gets.chomp
 end
 
@@ -199,7 +199,7 @@ menu '[A]ccept these changes / Manually [E]dit / [C]ancel Release' do |choice|
     tempfile.close
     system "#{editor} #{tempfile.path}"
     changes = File.open(tempfile.path, 'r').read.rstrip
-    md_changes = "# #{new_release}\n#{changes}\n\n"
+    md_changes = "# #{new_release} #{release_name}\n#{changes}\n\n"
     puts 'Modified Changelog additions'
     puts '----------'
     puts md_changes
